@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import React,{useEffect} from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DetectionHeader from '../../Components/HeaderComponent/DetectionHeader';
 
@@ -8,9 +8,21 @@ const ChooseStyleCategoryScreen = () => {
   const navigation = useNavigation();
 
   const handleSelectGender = (gender) => {
-    Alert.alert('Selected', `You selected ${gender}`);
     navigation.navigate('UploadPhotoScreen');
   };
+  useEffect(() => {
+    const backAction = () => {
+      BackHandler.exitApp(); // ✅ Close the app
+      return true; // prevent default behavior
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <View style={styles.container}>

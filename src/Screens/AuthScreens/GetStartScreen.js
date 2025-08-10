@@ -33,7 +33,7 @@ const GetStartScreen = () => {
 
       <Text
         style={styles.guestText}
-        onPress={() => navigation.navigate('Home')} // replace "Home" with your actual guest landing screen
+        onPress={() => navigation.navigate('ChooseStyleCategoryScreen')}
       >
         start as a guest
       </Text>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   button: {
-    backgroundColor: '#050C9C',
+    backgroundColor: '#1F4FFF',
     paddingVertical: 12,
     paddingHorizontal: 50,
     borderRadius: 10,
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   loginLink: {
-    color: '#3572EF',
+    color: '#1F4FFF',
     fontWeight: '600',
   },
   guestText: {

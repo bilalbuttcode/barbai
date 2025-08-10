@@ -49,7 +49,7 @@ const LoginScreen = () => {
 
 
       {/* Sign Up Link */}
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.replace('Signup')}>
         <Text style={styles.signUpText}>
           Don’t have an account? <Text style={styles.signUpLink}>Sign up here</Text>
         </Text>
@@ -116,7 +116,7 @@ Circle: {
 },
   inputIcon: {
     // marginRight: 10,
-    color: '#1e90ff',
+    color: '#1F4FFF',
     
   },
   input: {
@@ -134,7 +134,7 @@ Circle: {
     zIndex: 1                // For Android shadow
   },
   signInButton: {
-    backgroundColor: '#1e90ff',
+    backgroundColor: '#1F4FFF',
     width: '100%',
     paddingVertical: 15,
     borderRadius: 25,
@@ -167,7 +167,7 @@ Circle: {
     fontSize: 14,
   },
   signUpLink: {
-    color: '#1e90ff',
+    color: '#1F4FFF',
     fontWeight: '500',
   },
 

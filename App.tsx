@@ -49,6 +49,7 @@ const App = () => {
         <Stack.Screen
           name="Signup"
           component={Signup}
+          options={{ headerShown: false }}
         />
         {/* UploadPhotoScreen */}
       </Stack.Navigator>
