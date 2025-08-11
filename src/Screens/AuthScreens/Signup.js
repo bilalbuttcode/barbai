@@ -1,5 +1,5 @@
-import React ,{useState,useEffect} from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image ,BackHandler } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, BackHandler } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../Components/HeaderComponent/Header';
@@ -7,20 +7,7 @@ const Signup = () => {
   const navigation = useNavigation();
   const handelSignup = () => {
     navigation.replace('ChooseStyleCategoryScreen');
-  }
-  // useEffect(() => {
-  //   const backAction = () => {
-  //     navigation.navigate('GetStartScreen'); // Navigate to GetStartScreen
-  //     return true; // Prevent default back behavior
-  //   };
-
-  //   const backHandler = BackHandler.addEventListener(
-  //     'hardwareBackPress',
-  //     backAction
-  //   );
-
-  //   return () => backHandler.remove();
-  // }, [navigation]);
+  };
   return (
     <View style={styles.container}>
       <Header onBackPress={() => navigation.navigate('GetStartScreen')} />
@@ -32,8 +19,8 @@ const Signup = () => {
         />
 
         {/* Welcome Text */}
-        <Text style={styles.welcomeText}>Welcome back!</Text>
-        <Text style={styles.subText}>Login to your account</Text>
+        <Text style={styles.welcomeText}>Welcome</Text>
+        <Text style={styles.subText}>Create an account</Text>
 
         {/* Username Input */}
         <View >
@@ -57,12 +44,6 @@ const Signup = () => {
             <View style={{ width: '100%' }}><TextInput placeholder="Password" secureTextEntry style={styles.input} placeholderTextColor="#999" /></View>
           </View>
         </View>
-
-        {/* Password Input */}
-        {/* <View style={styles.inputContainer}>
-        <Icon name="lock" size={20} color="#999" style={styles.inputIcon} />
-        <TextInput placeholder="Password" secureTextEntry style={styles.input} placeholderTextColor="#999" />
-      </View> */}
 
         {/* Sign In Button */}
         <TouchableOpacity style={styles.signInButton} onPress={() => handelSignup()}>

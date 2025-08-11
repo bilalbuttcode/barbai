@@ -9,12 +9,13 @@ import UserManual from './src/Screens/SplashScreen/UserManual';
 import GetStartScreen from './src/Screens/AuthScreens/GetStartScreen';
 import UploadPhotoScreen from './src/Screens/DetectionScreen/UploadPhotoScreen';
 import ChooseStyleCategoryScreen from './src/Screens/DetectionScreen/ChooseStyleCategoryScreen';
+import HairAnalyzerScreen from './src/Screens/DetectionScreen/HairAnalyzerScreen';
 
 const App = () => {
   const Stack = createStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash">
+      <Stack.Navigator initialRouteName="HairAnalyzerScreen">
         <Stack.Screen
           name="Splash"
           component={Splash}
@@ -51,7 +52,12 @@ const App = () => {
           component={Signup}
           options={{ headerShown: false }}
         />
-        {/* UploadPhotoScreen */}
+         <Stack.Screen
+          name="HairAnalyzerScreen"
+          component={HairAnalyzerScreen}
+          options={{ headerShown: false }}
+        />
+        {/* UploadPhotoScreen HairAnalyzerScreen */}
       </Stack.Navigator>
     </NavigationContainer>
   )

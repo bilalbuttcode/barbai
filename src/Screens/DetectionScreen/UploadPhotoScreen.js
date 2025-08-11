@@ -12,7 +12,9 @@ import {
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome'; 
 import DetectionHeader from '../../Components/HeaderComponent/DetectionHeader';
+import { useNavigation } from '@react-navigation/native';
 const UploadPhotoScreen = () => {
+  const navigation = useNavigation();
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -71,6 +73,10 @@ const UploadPhotoScreen = () => {
           console.log('Camera Error: ', response.errorMessage);
         } else {
           console.log('Photo taken: ', response.assets[0]);
+          navigation.navigate('HairAnalyzerScreen', {
+            image: response.assets[0].uri,
+          });
+          
           // Do something with the image
         }
       },
