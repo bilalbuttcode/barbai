@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Share, StyleSheet, Text, View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react'
@@ -10,6 +10,7 @@ import GetStartScreen from './src/Screens/AuthScreens/GetStartScreen';
 import UploadPhotoScreen from './src/Screens/DetectionScreen/UploadPhotoScreen';
 import ChooseStyleCategoryScreen from './src/Screens/DetectionScreen/ChooseStyleCategoryScreen';
 import HairAnalyzerScreen from './src/Screens/DetectionScreen/HairAnalyzerScreen';
+import ShareScreen from './src/Screens/ShareScreen/ShareScreen';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -55,6 +56,11 @@ const App = () => {
          <Stack.Screen
           name="HairAnalyzerScreen"
           component={HairAnalyzerScreen}
+          options={{ headerShown: false }}
+        />
+          <Stack.Screen
+          name="ShareScreen"
+          component={ShareScreen}
           options={{ headerShown: false }}
         />
         {/* UploadPhotoScreen HairAnalyzerScreen */}

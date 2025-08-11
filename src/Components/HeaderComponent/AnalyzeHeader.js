@@ -30,7 +30,7 @@ const AnalyzeHeader = ({ back = false }) => { // <-- back prop with default fals
                 </TouchableOpacity>
             </View>
             <View style={{ width: '50%',justifyContent: 'center',marginLeft:'30%' }}>
-                <TouchableOpacity style={styles.tryOnBtn}>
+                <TouchableOpacity style={styles.tryOnBtn} onPress={() => navigation.navigate('ShareScreen')}>
                     <Text style={styles.tryOnTitle}>Share</Text>
                 </TouchableOpacity>
             </View>
