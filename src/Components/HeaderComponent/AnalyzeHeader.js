@@ -16,7 +16,7 @@ const AnalyzeHeader = ({ back = false }) => { // <-- back prop with default fals
     const handleLogout = () => {
         setVisible(false);
         // Add your logout logic here (e.g., clearing tokens, navigating to Login)
-        navigation.replace('Login');
+        navigation.replace('GetStartScreen');
     };
 
     return (

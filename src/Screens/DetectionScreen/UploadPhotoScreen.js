@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,13 +8,27 @@ import {
   PermissionsAndroid,
   Platform,
   Alert,
+  BackHandler
 } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import Icon from 'react-native-vector-icons/FontAwesome'; 
+import Icon from 'react-native-vector-icons/FontAwesome';
 import DetectionHeader from '../../Components/HeaderComponent/DetectionHeader';
 import { useNavigation } from '@react-navigation/native';
 const UploadPhotoScreen = () => {
   const navigation = useNavigation();
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack(); // 👈 Go back to previous screen
+      return true; // Prevent default exit app behavior
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [navigation]);
   const requestCameraPermission = async () => {
     if (Platform.OS === 'android') {
       try {
@@ -34,7 +48,7 @@ const UploadPhotoScreen = () => {
         return false;
       }
     }
-    return true; 
+    return true;
   };
 
 
@@ -74,37 +88,37 @@ const UploadPhotoScreen = () => {
         } else {
           console.log('Photo taken: ', response.assets[0]);
           navigation.navigate('HairAnalyzerScreen', {
-            image: response.assets[0].uri,
+            imageUri: response.assets[0].uri,
           });
-          
+
           // Do something with the image
         }
       },
     );
   };
 
-return (
-  <View style={styles.container}>
-    <DetectionHeader back={true} />
-    
-    <View style={styles.content}>
-      <Text style={styles.title}>Upload Your Photo</Text>
-      <Text style={styles.subtitle}>
-        For best results, use a clear, front-facing photo with good lighting.
-      </Text>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={handleUploadPhoto}>
-          <Icon name="plus" size={40} color="#000" />
-          <Text style={styles.buttonText}>Upload Photo</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleTakePhoto}>
-          <Icon name="camera" size={40} color="#000" />
-          <Text style={styles.buttonText}>Take picture from{'\n'}camera</Text>
-        </TouchableOpacity>
+  return (
+    <View style={styles.container}>
+      <DetectionHeader back={true} />
+
+      <View style={styles.content}>
+        <Text style={styles.title}>Upload Your Photo</Text>
+        <Text style={styles.subtitle}>
+          For best results, use a clear, front-facing photo with good lighting.
+        </Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleUploadPhoto}>
+            <Icon name="plus" size={40} color="#000" />
+            <Text style={styles.buttonText}>Upload Photo</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleTakePhoto}>
+            <Icon name="camera" size={40} color="#000" />
+            <Text style={styles.buttonText}>Take picture from{'\n'}camera</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
-  </View>
-);
+  );
 };
 
 export default UploadPhotoScreen;

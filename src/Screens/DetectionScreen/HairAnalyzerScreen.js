@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import {
   View,
   Text,
@@ -7,39 +7,56 @@ import {
   Modal,
   ScrollView,
   FlatList,
+  Image
 } from 'react-native';
 import AnalyzeHeader from '../../Components/HeaderComponent/AnalyzeHeader';
-
-export default function HairAnalyzerScreen() {
+export default function HairAnalyzerScreen({ route }) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({});
+  const [showOverlay, setShowOverlay] = useState(true);
+  const { imageUri } = route.params;
 
-  const filters = [
-    {
-      id: '1',
-      name: 'Hair Style',
-      options: [
-        'Oval',
-        'One Length',
-        'A-Line',
-        'The Bob',
-        'Inverted Bob',
-        'Bi-Level',
-        'Pixie',
-      ],
-    },
-    {
-      id: '2',
-      name: 'Length',
-      options: ['Short', 'Medium', 'Long'],
-    },
-    {
-      id: '3',
-      name: 'Texture',
-      options: ['Color'],
-    },
-  ];
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowOverlay(false);
+    }, 2000); // Hide after 2 seconds
+
+    return () => clearTimeout(timer);
+  }, []);
+
+const filters = [
+  {
+    id: '1',
+    name: 'Gender',
+    options: ['Men', 'Women'],
+  },
+  {
+    id: '2',
+    name: 'Face Shape',
+    options: ['Oval', 'Round', 'Square', 'Heart', 'Diamond'],
+  },
+  {
+    id: '3',
+    name: 'Hair Texture',
+    options: ['Straight', 'Wavy', 'Curly', 'Coily'],
+  },
+  {
+    id: '4',
+    name: 'Length',
+    options: ['Short', 'Medium', 'Long', 'Braids'],
+  },
+  {
+    id: '5',
+    name: 'Categories (Men)',
+    options: ['Fades', 'Afro', 'Buzz', 'Waves', 'Mohawk'],
+  },
+  {
+    id: '6',
+    name: 'Categories (Women)',
+    options: ['Pixie', 'Bob', 'Undercut', 'Natural', 'Locs'],
+  },
+];
 
   const toggleFilter = (category, option) => {
     setSelectedFilters((prev) => ({
@@ -56,10 +73,21 @@ export default function HairAnalyzerScreen() {
 
 
         {/* Main Image Area */}
+      <View style={styles.container}>
         <View style={styles.mainArea}>
-          <Text style={styles.loadingIcon}>✨</Text>
-          <Text style={styles.loadingText}>Analyzing Your Features..</Text>
+          <Image
+            source={{ uri: imageUri }}
+            style={{ width: '100%', height: '100%', borderRadius: 10 }}
+            resizeMode="cover"
+          />
+          {showOverlay && (
+            <View style={styles.overlay}>
+              <Text style={styles.loadingIcon}>✨</Text>
+              <Text style={styles.loadingText}>Analyzing Your Features..</Text>
+            </View>
+          )}
         </View>
+      </View>
 
         {/* Try On Row */}
         <View style={styles.tryOnRow}>
@@ -130,8 +158,8 @@ export default function HairAnalyzerScreen() {
                   </View>
                 ))}
               </ScrollView>
-              <View  style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <View style={{width: '50%',marginRight: 5}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ width: '50%', marginRight: 5 }}>
                   <TouchableOpacity
                     style={styles.closeBtn}
                     onPress={() => setModalVisible(false)}
@@ -140,17 +168,15 @@ export default function HairAnalyzerScreen() {
                   </TouchableOpacity>
 
                 </View>
-                <View style={{width: '50%',marginLeft: 5}}>
+                <View style={{ width: '50%', marginLeft: 5 }}>
                   <TouchableOpacity
                     style={styles.closeBtn}
                     onPress={() => setModalVisible(false)}
                   >
                     <Text style={styles.closeText}>Apply Filter</Text>
                   </TouchableOpacity>
-
                 </View>
               </View>
-
             </View>
           </View>
         </Modal>
@@ -208,9 +234,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 12,
     backgroundColor: '#fff',
-
-    // iOS shadow
-
   },
   tryOnCard: {
     flex: 1,
@@ -300,4 +323,25 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+  overlay: {
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: 'rgba(0,0,0,0.3)', // semi-transparent dark layer
+  borderRadius: 10,
+},
+loadingIcon: {
+  fontSize: 22,
+  color: '#fff',
+},
+loadingText: {
+  marginTop: 5,
+  fontSize: 16,
+  color: '#fff',
+  fontWeight: 'bold',
+}
 });
