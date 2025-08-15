@@ -63,6 +63,9 @@ const UploadPhotoScreen = () => {
           console.log('ImagePicker Error: ', response.errorMessage);
         } else {
           console.log('Image selected: ', response.assets[0]);
+          navigation.navigate('HairAnalyzerScreen', {
+            imageUri: response.assets[0].uri,
+          });
           // Do something with the image
         }
       },
