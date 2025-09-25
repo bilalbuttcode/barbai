@@ -11,6 +11,8 @@ import UploadPhotoScreen from './src/Screens/DetectionScreen/UploadPhotoScreen';
 import ChooseStyleCategoryScreen from './src/Screens/DetectionScreen/ChooseStyleCategoryScreen';
 import HairAnalyzerScreen from './src/Screens/DetectionScreen/HairAnalyzerScreen';
 import ShareScreen from './src/Screens/ShareScreen/ShareScreen';
+import OTP from './src/Screens/AuthScreens/OTP';
+import ForgotPasswordScreen from './src/Screens/AuthScreens/ForgotPasswordScreen';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -18,7 +20,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Splash">
         <Stack.Screen
-          name="Splash"
+          name="Splash"                                                   
           component={Splash}
           options={{ headerShown: false }}
         />
@@ -53,17 +55,26 @@ const App = () => {
           component={Signup}
           options={{ headerShown: false }}
         />
-         <Stack.Screen
+        <Stack.Screen
           name="HairAnalyzerScreen"
           component={HairAnalyzerScreen}
           options={{ headerShown: false }}
         />
-          <Stack.Screen
+        <Stack.Screen
           name="ShareScreen"
           component={ShareScreen}
           options={{ headerShown: false }}
         />
-        {/* UploadPhotoScreen HairAnalyzerScreen */}
+        <Stack.Screen
+          name="OTP"
+          component={OTP}
+          options={{ headerShown: true }}
+        />
+         <Stack.Screen
+          name="ForgotPasswordScreen"
+          component={ForgotPasswordScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )

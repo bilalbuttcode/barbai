@@ -1,20 +1,50 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, BackHandler } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert, KeyboardAvoidingView, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../Components/HeaderComponent/Header';
+import axios from 'axios';
+import baseURL from '../../Assets/BaseURL/api';
+import Loader from '../../Components/Loader/Loader';
 const Signup = () => {
   const navigation = useNavigation();
-  const handelSignup = () => {
-    navigation.replace('ChooseStyleCategoryScreen');
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleSignup = async () => {
+    
+    try {
+      setLoading(true);
+      const response = await axios.post(`${baseURL}/signup`, {
+        user_name: username,
+        email,
+        password,
+      });
+      if (response.data.message) {
+        Alert.alert("Success", response.data.message, [
+          { text: "OK", onPress: () => {console.log("ok");   navigation.navigate("OTP", { email: email });}},
+        ]);
+      }
+    } catch (error) {
+      if (error.response) {
+        Alert.alert("Error", error.response.data.error || "Something went wrong");
+      } else {
+        Alert.alert("Error", "Unable to connect to server");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Header onBackPress={() => navigation.navigate('GetStartScreen')} />
       {/* Logo */}
       <View style={{ alignItems: 'center', marginTop: 50, paddingHorizontal: 30, }}>
         <Image
-          source={require('../../Assets/Images/Logo2.png')} // replace with your actual logo path
+          source={require('../../Assets/Images/Logo2.png')}
           style={styles.logo}
         />
 
@@ -26,7 +56,12 @@ const Signup = () => {
         <View >
           <View style={styles.inputContainer}>
             <View style={styles.Circle}><Icon name="user" size={20} color="#1F4FFF" style={styles.inputIcon} /></View>
-            <View style={{ width: '100%' }}><TextInput placeholder="Username" style={styles.input} placeholderTextColor="#999" /></View>
+            <View style={{ width: '100%' }}>
+              <TextInput placeholder="Username"
+                style={styles.input}
+                placeholderTextColor="#999"
+                value={username}
+                onChangeText={setUsername} /></View>
           </View>
         </View>
         <View >
@@ -34,31 +69,44 @@ const Signup = () => {
           <View >
             <View style={styles.inputContainer}>
               <View style={styles.Circle}><Icon name="mail" size={20} color="#999" style={styles.inputIcon} /></View>
-              <View style={{ width: '100%' }}><TextInput placeholder="Email" style={styles.input} placeholderTextColor="#999" /></View>
+              <View style={{ width: '100%' }}>
+                <TextInput placeholder="Email"
+                  style={styles.input}
+                  placeholderTextColor="#999"
+                  value={email}
+                  onChangeText={setEmail} /></View>
             </View>
           </View>
 
 
           <View style={styles.inputContainer}>
             <View style={styles.Circle}><Icon name="lock" size={20} color="#999" style={styles.inputIcon} /></View>
-            <View style={{ width: '100%' }}><TextInput placeholder="Password" secureTextEntry style={styles.input} placeholderTextColor="#999" /></View>
+            <View style={{ width: '100%' }}>
+              <TextInput placeholder="Password"
+                secureTextEntry
+                style={styles.input}
+                placeholderTextColor="#999"
+                value={password}
+                onChangeText={setPassword}
+              /></View>
           </View>
         </View>
 
         {/* Sign In Button */}
-        <TouchableOpacity style={styles.signInButton} onPress={() => handelSignup()}>
+        <TouchableOpacity style={styles.signInButton} onPress={() => handleSignup()} disabled={loading}>
           <Text style={styles.signInText}>Sign Up</Text>
         </TouchableOpacity>
 
 
         {/* Sign Up Link */}
-        <TouchableOpacity onPress={() => navigation.replace('Login')}>
+        <TouchableOpacity onPress={() => navigation.replace('Login')}  disabled={loading}>
           <Text style={styles.signUpText}>
             Already have an account? <Text style={styles.signUpLink}>Sign in here</Text>
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+      {loading && <Loader />}
+    </ScrollView>
   );
 };
 

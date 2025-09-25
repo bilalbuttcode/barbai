@@ -1,60 +1,117 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../../Components/HeaderComponent/Header';
 import UploadPhotoScreen from '../DetectionScreen/UploadPhotoScreen';
-const LoginScreen = () => {
-  const navigation = useNavigation();
+import Loader from '../../Components/Loader/Loader';
+import baseURL from '../../Assets/BaseURL/api';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+const LoginScreen = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.post(`${baseURL}/login`, {
+        "email": email,
+        "password": password,
+      });
+      console.log(response.data, "Data");
+
+      if (response.data.message) {
+        Alert.alert("Success", response.data.message, [
+          {
+            text: "OK",
+            onPress: () => {
+              console.log("Login successful");
+              navigation.replace('ChooseStyleCategoryScreen');
+              // 👉 Save userId or token if needed
+              AsyncStorage.setItem("userId", response.data.user_id.toString());
+              AsyncStorage.setItem("token", response.data.token);
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      if (error.response) {
+        if (error.response.status === 403) {
+          // console.log("Forbidden: 403 error received", error.response.data);
+          navigation.navigate("OTP", { email: email })
+        } else {
+          Alert.alert("Error", error.response.data.error || "Something went wrong");
+        }
+      } else {
+        Alert.alert("Error", "Unable to connect to server");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <View style={styles.container}>
       <Header onBackPress={() => navigation.goBack()} />
       {/* Logo */}
-      <View style={{ alignItems: 'center', marginTop: 50,  paddingHorizontal: 30, }}>
-      <Image
-        source={require('../../Assets/Images/Logo2.png')} // replace with your actual logo path
-        style={styles.logo}
-      />
+      
+      <View style={{ alignItems: 'center', marginTop: 50, paddingHorizontal: 30, }}>
+        <Image
+          source={require('../../Assets/Images/Logo2.png')} // replace with your actual logo path
+          style={styles.logo}
+        />
 
-      {/* Welcome Text */}
-      <Text style={styles.welcomeText}>Welcome back!</Text>
-      <Text style={styles.subText}>Login to your account</Text>
+        {/* Welcome Text */}
+        <Text style={styles.welcomeText}>Welcome back!</Text>
+        <Text style={styles.subText}>Login to your account</Text>
+        <View >
 
-      {/* Username Input */}
-      <View >
-
-        <View style={styles.inputContainer}>
-          <View style={styles.Circle}><Icon name="user" size={20} color="#999" style={styles.inputIcon} /></View>
-          <View style={{ width: '100%' }}><TextInput placeholder="Username" style={styles.input} placeholderTextColor="#999" /></View>
+          <View style={styles.inputContainer}>
+            <View style={styles.Circle}><Icon name="mail" size={20} color="#999" style={styles.inputIcon} /></View>
+            <View style={{ width: '100%' }}>
+              <TextInput
+                placeholder="Email"
+                style={styles.input}
+                placeholderTextColor="#999"
+                value={email}
+                onChangeText={setEmail}
+              />
+            </View>
+          </View>
         </View>
-      </View>
-            <View >
+        <View >
+          <View style={styles.inputContainer}>
+            <View style={styles.Circle}><Icon name="lock" size={20} color="#999" style={styles.inputIcon} /></View>
+            <View style={{ width: '100%' }}>
+              <TextInput placeholder="Password"
+                secureTextEntry style={styles.input}
+                placeholderTextColor="#999"
+                value={password}
+                onChangeText={setPassword}
+              />
+              </View>
 
-        <View style={styles.inputContainer}>
-          <View style={styles.Circle}><Icon name="lock" size={20} color="#999" style={styles.inputIcon} /></View>
-          <View style={{ width: '100%' }}><TextInput placeholder="Password" secureTextEntry style={styles.input} placeholderTextColor="#999" /></View>
+          </View>
+          <View>
+            <TouchableOpacity style={{marginLeft:'auto', marginBottom:10}} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+              <Text>Forgot Password?</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+
+        {/* Sign In Button */}
+        <TouchableOpacity style={styles.signInButton} onPress={() => handleLogin()} disabled={loading}>
+          <Text style={styles.signInText}>Sign in</Text>
+        </TouchableOpacity>
+
+        {/* Sign Up Link */}
+        <TouchableOpacity onPress={() => navigation.replace('Signup')}>
+          <Text style={styles.signUpText}>
+            Don’t have an account? <Text style={styles.signUpLink}>Sign up here</Text>
+          </Text>
+        </TouchableOpacity>
       </View>
-
-      {/* Password Input */}
-      {/* <View style={styles.inputContainer}>
-        <Icon name="lock" size={20} color="#999" style={styles.inputIcon} />
-        <TextInput placeholder="Password" secureTextEntry style={styles.input} placeholderTextColor="#999" />
-      </View> */}
-
-      {/* Sign In Button */}
-      <TouchableOpacity style={styles.signInButton} onPress={() => navigation.replace('ChooseStyleCategoryScreen')}>
-        <Text style={styles.signInText}>Sign in</Text>
-      </TouchableOpacity>
-
-
-      {/* Sign Up Link */}
-      <TouchableOpacity onPress={() => navigation.replace('Signup')}>
-        <Text style={styles.signUpText}>
-          Don’t have an account? <Text style={styles.signUpLink}>Sign up here</Text>
-        </Text>
-      </TouchableOpacity>
-      </View>
+      {loading && <Loader />}
     </View>
   );
 };
@@ -95,29 +152,29 @@ const styles = StyleSheet.create({
     position: 'relative',
     flexDirection: 'row',
   },
-Circle: {
-  width: 60,
-  height: 60,
-  borderRadius: 30,                // Half of width/height
-  justifyContent: 'center',
-  alignItems: 'center',
-  position: 'absolute',
-  zIndex: 2,
-  backgroundColor: '#ffffff',
+  Circle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,                // Half of width/height
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    zIndex: 2,
+    backgroundColor: '#ffffff',
 
-  // iOS Shadow
-  shadowColor: '#000',
-  shadowOffset: { width: 0, height: 2 },
-  shadowOpacity: 0.3,
-  shadowRadius: 4,
+    // iOS Shadow
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
 
-  // Android Shadow
-  elevation: 6,
-},
+    // Android Shadow
+    elevation: 6,
+  },
   inputIcon: {
     // marginRight: 10,
     color: '#1F4FFF',
-    
+
   },
   input: {
     fontSize: 16,
