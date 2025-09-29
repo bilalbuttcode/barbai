@@ -10,6 +10,6 @@
         <domain includeSubdomains="true">127.0.0.1</domain>
     </domain-config>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">68ba44e14aac.ngrok-free.app</domain>
+        <domain includeSubdomains="true">75430f2a6796.ngrok-free.app</domain>
     </domain-config>
 </network-security-config>

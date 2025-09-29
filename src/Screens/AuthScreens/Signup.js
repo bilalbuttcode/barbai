@@ -6,6 +6,7 @@ import Header from '../../Components/HeaderComponent/Header';
 import axios from 'axios';
 import baseURL from '../../Assets/BaseURL/api';
 import Loader from '../../Components/Loader/Loader';
+// import {  } from "../../Assets/Images/men";
 const Signup = () => {
   const navigation = useNavigation();
 
@@ -61,7 +62,8 @@ const Signup = () => {
                 style={styles.input}
                 placeholderTextColor="#999"
                 value={username}
-                onChangeText={setUsername} /></View>
+                onChangeText={setUsername} />
+                </View>
           </View>
         </View>
         <View >
