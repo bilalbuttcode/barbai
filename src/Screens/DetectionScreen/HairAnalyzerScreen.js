@@ -322,8 +322,10 @@ export default function HairAnalyzerScreen({ route }) {
     }
   }, [selectedGender]);
 
-  // API call handler
+  // API call 
+  
   const tryOnHairstyle = async (item) => {
+          console.log(item,imageUri);
     try {
       setShowOverlay(true);
       const formData = new FormData();
@@ -334,6 +336,7 @@ export default function HairAnalyzerScreen({ route }) {
         name: "photo.jpg",
         type: "image/jpeg",
       });
+
 
       if (item.auto) {
         formData.append("auto_recommend", "false");
@@ -353,14 +356,14 @@ export default function HairAnalyzerScreen({ route }) {
       });
 
       const result = await response.json();
-      if (result.output_path) {
-        const outputUrl = `${baseURL}/generated_images/${result.user_id}_edited.png`;
+      if (result.edited_image) {
+        const outputUrl = `${baseURL}/generated_images/${result.edited_image}`;
         setProcessedImage(outputUrl);
       } else {
         Alert.alert("Error", "Failed to process image.");
       }
     } catch (error) {
-      console.error(error);
+      // console.error(error);
       Alert.alert("Error", "Something went wrong while processing image.");
     } finally {
       setShowOverlay(false);
