@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -14,8 +14,11 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import DetectionHeader from '../../Components/HeaderComponent/DetectionHeader';
 import { useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 const UploadPhotoScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const { selectedGender } = route.params;
   useEffect(() => {
     const backAction = () => {
       navigation.goBack(); // 👈 Go back to previous screen
@@ -65,6 +68,7 @@ const UploadPhotoScreen = () => {
           console.log('Image selected: ', response.assets[0]);
           navigation.navigate('HairAnalyzerScreen', {
             imageUri: response.assets[0].uri,
+            selectedGender: selectedGender,
           });
           // Do something with the image
         }
@@ -82,7 +86,7 @@ const UploadPhotoScreen = () => {
       return;
     }
     launchCamera(
-      { mediaType: 'photo', quality: 0.8 },
+      { mediaType: 'photo', quality: 0.6 },
       response => {
         if (response.didCancel) {
           console.log('User cancelled camera');
@@ -92,6 +96,7 @@ const UploadPhotoScreen = () => {
           console.log('Photo taken: ', response.assets[0]);
           navigation.navigate('HairAnalyzerScreen', {
             imageUri: response.assets[0].uri,
+            selectedGender: selectedGender,
           });
 
           // Do something with the image

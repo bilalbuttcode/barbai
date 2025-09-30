@@ -1,0 +1,122 @@
+export const hairstyleswomen = [
+  {
+    hairstyle: "Undercut",
+    length: "Short",
+    hairType: "Wavy",
+    image: require("../women/15_Undercut_Short_Wavy.png"),
+  },
+  {
+    hairstyle: "Pixie",
+    length: "Short",
+    hairType: "Straight",
+    image: require("../women/15_Pixie_Short_Straight.png"),
+  },
+  {
+    hairstyle: "Pixie",
+    length: "Long",
+    hairType: "Curly",
+    image: require("../women/15_Pixie_Long_Curly.png"),
+  },
+  {
+    hairstyle: "Bob",
+    length: "Braids",
+    hairType: "Coily",
+    image: require("../women/15_Bob_Braids_Coily.png"),
+  },
+  {
+    hairstyle: "Locs",
+    length: "Braids",
+    hairType: "Coily",
+    image: require("../women/15_Locs_Braids_Coily.png"),
+  },
+  {
+    hairstyle: "Locs",
+    length: "Medium",
+    hairType: "Straight",
+    image: require("../women/15_Locs_Medium_Straight.png"),
+  },
+  {
+    hairstyle: "Pixie",
+    length: "Braids",
+    hairType: "Coily",
+    image: require("../women/15_Pixie_Braids_Coily.png"),
+  },
+  {
+    hairstyle: "Locs",
+    length: "Long",
+    hairType: "Wavy",
+    image: require("../women/15_Locs_Long_Wavy.png"),
+  },
+  {
+    hairstyle: "Undercut",
+    length: "Long",
+    hairType: "Straight",
+    image: require("../women/15_Undercut_Long_Straight.png"),
+  },
+  {
+    hairstyle: "Natural",
+    length: "Braids",
+    hairType: "Straight",
+    image: require("../women/15_Natural_Braids_Straight.png"),
+  },
+  {
+    hairstyle: "Natural",
+    length: "Short",
+    hairType: "Coily",
+    image: require("../women/15_Natural_Short_Coily.png"),
+  },
+  {
+    hairstyle: "Bob",
+    length: "Medium",
+    hairType: "Straight",
+    image: require("../women/15_Bob_Medium_Straight.png"),
+  },
+  {
+    hairstyle: "Undercut",
+    length: "Braids",
+    hairType: "Coily",
+    image: require("../women/15_Undercut_Braids_Coily.png"),
+  },
+  {
+    hairstyle: "Locs",
+    length: "Short",
+    hairType: "Curly",
+    image: require("../women/15_Locs_Short_Curly.png"),
+  },
+  {
+    hairstyle: "Bob",
+    length: "Long",
+    hairType: "Wavy",
+    image: require("../women/15_Bob_Long_Wavy.png"),
+  },
+  {
+    hairstyle: "Natural",
+    length: "Medium",
+    hairType: "Wavy",
+    image: require("../women/15_Natural_Medium_Wavy.png"),
+  },
+  {
+    hairstyle: "Natural",
+    length: "Long",
+    hairType: "Curly",
+    image: require("../women/15_Natural_Long_Curly.png"),
+  },
+  {
+    hairstyle: "Undercut",
+    length: "Medium",
+    hairType: "Curly",
+    image: require("../women/15_Undercut_Medium_Curly.png"),
+  },
+  {
+    hairstyle: "Bob",
+    length: "Short",
+    hairType: "Curly",
+    image: require("../women/15_Bob_Short_Curly.png"),
+  },
+  {
+    hairstyle: "Pixie",
+    length: "Medium",
+    hairType: "Wavy",
+    image: require("../women/15_Pixie_Medium_Wavy.png"),
+  }
+];

@@ -7,9 +7,9 @@ import DetectionHeader from '../../Components/HeaderComponent/DetectionHeader';
 const ChooseStyleCategoryScreen = () => {
   const navigation = useNavigation();
 
-  const handleSelectGender = (gender) => {
-    navigation.navigate('UploadPhotoScreen');
-  };
+const handleSelectGender = (gender) => {
+  navigation.navigate('UploadPhotoScreen', { selectedGender: gender });
+};
   useEffect(() => {
     const backAction = () => {
       BackHandler.exitApp(); // ✅ Close the app
