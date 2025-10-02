@@ -4,7 +4,7 @@ import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 
-const AnalyzeHeader = ({ back = false }) => { // <-- back prop with default false
+const AnalyzeHeader = ({ back = false , sharei = false , url = null}) => { // <-- back prop with default false
     const [visible, setVisible] = useState(false);
     const navigation = useNavigation();
 
@@ -30,9 +30,10 @@ const AnalyzeHeader = ({ back = false }) => { // <-- back prop with default fals
                 </TouchableOpacity>
             </View>
             <View style={{ width: '50%',justifyContent: 'center',marginLeft:'30%' }}>
-                <TouchableOpacity style={styles.tryOnBtn} onPress={() => navigation.navigate('ShareScreen')}>
+                {sharei && url?(<TouchableOpacity style={styles.tryOnBtn} onPress={() => navigation.navigate('ShareScreen',{url})} >
                     <Text style={styles.tryOnTitle}>Share</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>):(<View></View>)}
+                
             </View>
 
             <Modal

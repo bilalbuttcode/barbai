@@ -34,7 +34,7 @@ const handleSelectGender = (gender) => {
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.card}
-            onPress={() => handleSelectGender('Male')}
+            onPress={() => handleSelectGender('men')}
           >
             <Icon name="mars" size={50} color="#000" />
             <Text style={styles.cardText}>Male</Text>
