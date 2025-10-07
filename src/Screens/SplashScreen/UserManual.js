@@ -2,26 +2,65 @@ import React, { useRef, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const UserManual = () => {
     const swiperRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const navigation = useNavigation();
 
+    // useEffect(() => {
+    //     const interval = setInterval(() => {
+    //         if (currentIndex < 2) {
+    //             const nextIndex = currentIndex + 1;
+    //             swiperRef.current.scrollBy(1);
+    //             setCurrentIndex(nextIndex);
+    //         } else {
+    //             clearInterval(interval);
+    //             const userId = AsyncStorage.getItem("userId");
+    //             const token = AsyncStorage.getItem("token");
+    //             console.log(token ,userId );
+    //             if (userId && token) {
+    //                 // Already logged in → go to ChooseStyleCategoryScreen
+    //                 navigation.replace("ChooseStyleCategoryScreen");
+    //             } else {
+    //                   navigation.replace("GetStartScreen");
+
+    //             }
+    //         }
+    //     }, 3000); // 3 seconds interval
+
+    //     return () => clearInterval(interval);
+    // }, [currentIndex]);
     useEffect(() => {
-        const interval = setInterval(() => {
+        const interval = setInterval(async () => {
             if (currentIndex < 2) {
                 const nextIndex = currentIndex + 1;
                 swiperRef.current.scrollBy(1);
                 setCurrentIndex(nextIndex);
             } else {
                 clearInterval(interval);
-                navigation.replace('GetStartScreen'); // Stop after last screen
+
+                // ✅ properly await AsyncStorage values
+                const userId = await AsyncStorage.getItem("userId");
+                const token = await AsyncStorage.getItem("token");
+
+                console.log("Auth check:", userId, token);
+
+                if (userId && token) {
+                    navigation.replace("ChooseStyleCategoryScreen");
+                } else {
+                    navigation.replace("GetStartScreen");
+                }
             }
-        }, 3000); // 3 seconds interval
+        }, 3000);
 
         return () => clearInterval(interval);
     }, [currentIndex]);
+
+
+
+
 
     return (
         <Swiper

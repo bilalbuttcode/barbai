@@ -22,18 +22,22 @@ const LoginScreen = ({ navigation }) => {
       console.log(response.data, "Data");
 
       if (response.data.message) {
-        Alert.alert("Success", response.data.message, [
-          {
-            text: "OK",
-            onPress: () => {
-              console.log("Login successful");
-              navigation.replace('ChooseStyleCategoryScreen');
-              // 👉 Save userId or token if needed
-              AsyncStorage.setItem("userId", response.data.user_id.toString());
-              AsyncStorage.setItem("token", response.data.token);
-            },
-          },
-        ]);
+        // Alert.alert("Success", response.data.message, [
+        //   {
+        //     text: "OK",
+        //     onPress: () => {
+        //       console.log("Login successful");
+        //       AsyncStorage.setItem("userId", response.data.user_id.toString());
+        //       AsyncStorage.setItem("token", response.data.token);
+        //       navigation.replace('ChooseStyleCategoryScreen');
+        //       // 👉 Save userId or token if needed
+
+        //     },
+        //   },
+        // ]);
+        AsyncStorage.setItem("userId", response.data.user_id.toString());
+        AsyncStorage.setItem("token", response.data.token);
+        navigation.replace('ChooseStyleCategoryScreen');
       }
     } catch (error) {
       if (error.response) {
@@ -54,7 +58,7 @@ const LoginScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Header onBackPress={() => navigation.goBack()} />
       {/* Logo */}
-      
+
       <View style={{ alignItems: 'center', marginTop: 50, paddingHorizontal: 30, }}>
         <Image
           source={require('../../Assets/Images/Logo2.png')} // replace with your actual logo path
@@ -89,11 +93,11 @@ const LoginScreen = ({ navigation }) => {
                 value={password}
                 onChangeText={setPassword}
               />
-              </View>
+            </View>
 
           </View>
           <View>
-            <TouchableOpacity style={{marginLeft:'auto', marginBottom:10}} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
+            <TouchableOpacity style={{ marginLeft: 'auto', marginBottom: 10 }} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
               <Text>Forgot Password?</Text>
             </TouchableOpacity>
           </View>

@@ -31,12 +31,12 @@ const GetStartScreen = () => {
         </Text>
       </Text>
 
-      <Text
+      {/* <Text
         style={styles.guestText}
         onPress={() => navigation.navigate('ChooseStyleCategoryScreen')}
       >
         start as a guest
-      </Text>
+      </Text> */}
     </View>
   );
 };

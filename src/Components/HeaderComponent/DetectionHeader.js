@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const DetectionHeader = ({ back = false }) => { // <-- back prop with default false
   const [visible, setVisible] = useState(false);
@@ -13,11 +14,19 @@ const DetectionHeader = ({ back = false }) => { // <-- back prop with default fa
     navigation.goBack();
   };
 
-  const handleLogout = () => {
+const handleLogout = async () => {
+  try {
     setVisible(false);
-    // Add your logout logic here (e.g., clearing tokens, navigating to Login)
-    navigation.replace('GetStartScreen');
-  };
+
+    // Clear AsyncStorage values
+    await AsyncStorage.removeItem("userId");
+    await AsyncStorage.removeItem("token");
+    console.log("Logged out successfully");
+    navigation.replace("GetStartScreen");
+  } catch (err) {
+    console.log("Logout error:", err);
+  }
+};
 
   return (
     <View style={styles.container}>
