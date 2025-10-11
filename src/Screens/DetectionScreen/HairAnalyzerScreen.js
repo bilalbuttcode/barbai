@@ -17,6 +17,8 @@ import { hairstyleswomen } from "../../Assets/Images/women/hairstyleswomen";
 import { hairstylesmen } from "../../Assets/Images/men/hairstylesmen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import RNFS from "react-native-fs";
+
 export default function HairAnalyzerScreen({ route }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({});
@@ -24,6 +26,9 @@ export default function HairAnalyzerScreen({ route }) {
   const [processedImage, setProcessedImage] = useState(null);
   const [recommendations, setRecommendations] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [remainingCredits, setRemainingCredits] = useState(5);
+  const [share , setshare] = useState(false)
+
 
   const { imageUri, selectedGender } = route.params;
   // console.log(imageUri, selectedGender)
@@ -39,12 +44,10 @@ export default function HairAnalyzerScreen({ route }) {
   }, [selectedGender]);
 
   const tryOnHairstyle = async (item) => {
-    console.log("Trying hairstyle:", item, "with image:", imageUri);
 
     try {
       setShowOverlay(true);
 
-      // Build FormData
       const formData = new FormData();
       formData.append("user_id", userId);
       formData.append("gender", selectedGender.toLowerCase());
@@ -67,15 +70,37 @@ export default function HairAnalyzerScreen({ route }) {
       const response = await fetch(`${baseURL}/edit-hairstyle`, {
         method: "POST",
         body: formData,
-        // ⚠️ No Content-Type here! RN sets it automatically
       });
 
-      const rawText = await response.text(); // always read text first
-      // console.log("Raw server response:", rawText);
+      const rawText = await response.text();
 
       if (!response.ok) {
         console.error("Server error response:", rawText);
-        Alert.alert("Error", "Server failed to process image.");
+
+        // 🔹 Try to parse server message even if not ok
+        let errMessage = "Server failed to process image.";
+        try {
+          const errData = JSON.parse(rawText);
+          if (errData.error) errMessage = errData.error;
+        } catch (_) { }
+
+        // 🔹 Check for credit-related message
+        if (errMessage.includes("Insufficient credits")) {
+          Alert.alert(
+            "Not Enough Credits",
+            "You’ve used all your available credits. Please buy or renew your plan.",
+            [
+              { text: "Cancel", style: "cancel" },
+              {
+                text: "OK",
+                // onPress: () => navigation.navigate("PaymentScreen") 
+              },
+            ]
+          );
+        } else {
+          Alert.alert("Error", errMessage);
+        }
+
         return;
       }
 
@@ -91,21 +116,25 @@ export default function HairAnalyzerScreen({ route }) {
       console.log("Parsed API Result:", result);
 
       if (result.edited_image) {
-        const outputUrl = `${baseURL}/generated_images/${result.edited_image}`;
+        const outputUrl = `${baseURL}/generated_images/${result.edited_image}?t=${Date.now()}`;
         setProcessedImage(outputUrl);
+        setshare(true);
 
+        // Optional: update credits after success
+        // You could re-fetch credits here if you show them in the header
+        // fetchCredits(userId);
       } else {
         console.error("API Error:", result.error || "Unknown error");
         Alert.alert("Error", result.error || "Failed to process image.");
       }
     } catch (error) {
       console.error("Request Error:", error);
-      Alert.alert("Error", "Something went wrong while processing image.");
+      Alert.alert("Error", error.message || "An error occurred.");
     } finally {
       setShowOverlay(false);
+      fetchCredits(userId);
     }
   };
-
 
 
   // card UI
@@ -150,12 +179,29 @@ export default function HairAnalyzerScreen({ route }) {
       [category]: prev[category] === option ? null : option,
     }));
   };
+
+  const fetchCredits = async (id) => {
+    try {
+      const response = await fetch(`${baseURL}/credits?user_id=${id}`);
+      const data = await response.json();
+
+      if (response.ok) {
+        setRemainingCredits(data.remaining_credits);
+      } else {
+        setRemainingCredits('0');
+      }
+    } catch (error) {
+      console.error('Error fetching credits:', error);
+      setRemainingCredits('0');
+    }
+  };
   useEffect(() => {
     const loadUserId = async () => {
       try {
         const storedUserId = await AsyncStorage.getItem("userId");
         if (storedUserId) {
           setUserId(storedUserId);
+          fetchCredits(storedUserId);
         } else {
           console.warn("No userId found in AsyncStorage");
         }
@@ -163,7 +209,6 @@ export default function HairAnalyzerScreen({ route }) {
         console.error("Error fetching userId:", error);
       }
     };
-
     loadUserId();
   }, []);
 
@@ -178,7 +223,13 @@ export default function HairAnalyzerScreen({ route }) {
 
   return (
     <View style={{ backgroundColor: "#fff", flex: 1 }}>
-      <AnalyzeHeader back={true} sharei={processedImage?.length>0?true:false} url={processedImage?.length>0?processedImage:null}/>
+      <AnalyzeHeader
+        back={true}
+        sharei={share}
+        url={ processedImage || imageUri}
+        remainingCredits={remainingCredits}
+        openSubscription={remainingCredits <= 4}
+      />
       <View style={styles.container}>
         {/* Main Image Area */}
         <View style={styles.mainArea}>
