@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useCallback } from "react";
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import { hairstylesmen } from "../../Assets/Images/men/hairstylesmen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import RNFS from "react-native-fs";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function HairAnalyzerScreen({ route }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,7 +28,7 @@ export default function HairAnalyzerScreen({ route }) {
   const [recommendations, setRecommendations] = useState([]);
   const [userId, setUserId] = useState(null);
   const [remainingCredits, setRemainingCredits] = useState(5);
-  const [share , setshare] = useState(false)
+  const [share, setshare] = useState(false)
 
 
   const { imageUri, selectedGender } = route.params;
@@ -195,7 +196,25 @@ export default function HairAnalyzerScreen({ route }) {
       setRemainingCredits('0');
     }
   };
-  useEffect(() => {
+  // useEffect(() => {
+  //   const loadUserId = async () => {
+  //     try {
+  //       const storedUserId = await AsyncStorage.getItem("userId");
+  //       if (storedUserId) {
+  //         setUserId(storedUserId);
+  //         fetchCredits(storedUserId);
+  //       } else {
+  //         console.warn("No userId found in AsyncStorage");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching userId:", error);
+  //     }
+  //   };
+  //   loadUserId();
+  // }, []);
+
+  useFocusEffect(
+  useCallback(() => {
     const loadUserId = async () => {
       try {
         const storedUserId = await AsyncStorage.getItem("userId");
@@ -209,9 +228,13 @@ export default function HairAnalyzerScreen({ route }) {
         console.error("Error fetching userId:", error);
       }
     };
-    loadUserId();
-  }, []);
 
+    loadUserId();
+
+    // Cleanup (optional)
+    return () => {};
+  }, [])
+);
 
   const filters = [
     { id: "2", name: "Hair Texture", options: ["Straight", "Wavy", "Curly", "Coily"] },
@@ -226,7 +249,7 @@ export default function HairAnalyzerScreen({ route }) {
       <AnalyzeHeader
         back={true}
         sharei={share}
-        url={ processedImage || imageUri}
+        url={processedImage || imageUri}
         remainingCredits={remainingCredits}
         openSubscription={remainingCredits <= 4}
       />
@@ -238,12 +261,17 @@ export default function HairAnalyzerScreen({ route }) {
             style={{ width: "100%", height: "100%", borderRadius: 10 }}
             resizeMode="cover"
           />
+
           {showOverlay && (
             <View style={styles.overlay}>
               <ActivityIndicator size="large" color="#fff" />
-              <Text style={styles.loadingText}>Processing...</Text>
+              <Text style={styles.loadingText}>Processing Image...</Text>
+              <Text style={styles.subText}>
+                This may take a few moments while we upload and analyze your image.
+              </Text>
             </View>
-          )}
+          )} 
+
         </View>
         <View>
           <FlatList
@@ -447,4 +475,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   closeText: { color: "#fff", fontWeight: "bold" },
+  subText: {
+  color: '#ccc',
+  fontSize: 14,
+  marginTop: 5,
+  textAlign: 'center',
+  paddingHorizontal: 20,
+},
 });

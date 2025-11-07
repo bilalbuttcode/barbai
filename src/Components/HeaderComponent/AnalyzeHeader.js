@@ -97,15 +97,16 @@ const AnalyzeHeader = ({ back = false, sharei = false, url = null, remainingCred
         </TouchableOpacity>
       </View>
 
-      <View style={{ width: '60%', justifyContent: 'center' ,flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around'}}>
+      <View style={{ width: '60%', justifyContent: 'center', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around' }}>
+        {sharei && url ? (<TouchableOpacity style={styles.tryOnBtn} onPress={() => navigation.navigate('ShareScreen', { url })}  >
+          <Text style={styles.tryOnText}>Share</Text>
+        </TouchableOpacity>) : (<View></View>)}
         <View style={{ alignItems: 'center', backgroundColor: '#E0E0E0', padding: 5, borderRadius: 6 }}>
           <Text style={{ fontSize: 16, color: '#000' }}>
             Credits: {remainingCredits}
           </Text>
         </View>
-        {sharei && url ? (<TouchableOpacity style={styles.tryOnBtn} onPress={() => navigation.navigate('ShareScreen', { url })}  >
-          <Text style={styles.tryOnText}>Share</Text>
-        </TouchableOpacity>) : (<View></View>)}
+
       </View>
 
       {/* --- MAIN MENU --- */}
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: "5%",
   },
-   tryOnBtn: {
+  tryOnBtn: {
     backgroundColor: "#3572EF",
     // paddingVertical: 8,
     borderRadius: 6,

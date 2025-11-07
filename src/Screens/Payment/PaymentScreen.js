@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,9 +9,10 @@ import {
 } from "react-native";
 import { CardField, useStripe } from "@stripe/stripe-react-native";
 import baseURL from "../../Assets/BaseURL/api";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-export default function PaymentScreen() {
+import Header from "../../Components/HeaderComponent/Header";
+export default function PaymentScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState(null);
   const { confirmPayment } = useStripe();
@@ -21,7 +22,7 @@ export default function PaymentScreen() {
 
   // const API_URL = "https://9a8212c41713.ngrok-free.app"; // Flask backend URL
 
-  const handlePayPress = async () => {
+  const handlePayPress = async ({ }) => {
     setLoading(true);
     try {
       // 1️⃣ Create PaymentIntent on Flask backend
@@ -36,7 +37,7 @@ export default function PaymentScreen() {
           currency: "usd",
         }),
       });
-      
+
 
       const { clientSecret, error } = await response.json();
 
@@ -82,48 +83,51 @@ export default function PaymentScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>💳 Pay Securely</Text>
+      <Header onBackPress={() => navigation.goBack()} />
+      <View style={{ marginTop: 50 }}>
+        <Text style={styles.header}>💳 Pay Securely</Text>
 
-      <View style={styles.cardBox}>
-        <Text style={styles.label}>Card details</Text>
+        <View style={styles.cardBox}>
+          <Text style={styles.label}>Card details</Text>
 
-        <CardField
-          postalCodeEnabled={false}
-          placeholder={{
-            number: "4242 4242 4242 4242",
-            expiration: "MM/YY",
-            cvc: "CVC",
-            // postalCode: "ZIP",
-          }}
-          cardStyle={{
-            backgroundColor: "#000000",
-            textColor: "#ffffff",
-            // placeholderColor: "#999",
-            // borderWidth: 1,
-            // borderColor: "#ddd",
-            // borderRadius: 8,
-            // fontSize: 16,
-          }}
-          style={styles.cardField}
-          placeholderTextColor="#999"
-        />
+          <CardField
+            postalCodeEnabled={false}
+            placeholder={{
+              number: "4242 4242 4242 4242",
+              expiration: "MM/YY",
+              cvc: "CVC",
+              // postalCode: "ZIP",
+            }}
+            cardStyle={{
+              backgroundColor: "#000000",
+              textColor: "#ffffff",
+              // placeholderColor: "#999",
+              // borderWidth: 1,
+              // borderColor: "#ddd",
+              // borderRadius: 8,
+              // fontSize: 16,
+            }}
+            style={styles.cardField}
+            placeholderTextColor="#999"
+          />
 
-        {/* <Text style={styles.helperText}>
+          {/* <Text style={styles.helperText}>
           Use test card: 4242 4242 4242 4242 — Exp: any future date — CVC: any 3 digits
         </Text> */}
-      </View>
+        </View>
 
-      <TouchableOpacity
-        style={[styles.payButton, loading && { opacity: 0.6 }]}
-        onPress={handlePayPress}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.payButtonText}>Pay</Text>
-        )}
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.payButton, loading && { opacity: 0.6 }]}
+          onPress={handlePayPress}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.payButtonText}>Pay</Text>
+          )}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -131,16 +135,16 @@ export default function PaymentScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F8FAFF",
+    backgroundColor: "#ffffff",
     paddingHorizontal: 20,
-    justifyContent: "center",
+    // justifyContent: "center",
   },
   header: {
     fontSize: 24,
     fontWeight: "700",
     textAlign: "center",
-    color: "#050C9C",
-    marginBottom: 25,
+    color: "#3572EF",
+    marginBottom: 20,
   },
   cardBox: {
     backgroundColor: "#fff",
